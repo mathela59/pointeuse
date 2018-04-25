@@ -19,32 +19,44 @@ class LogRepository extends ServiceEntityRepository
         parent::__construct($registry, Log::class);
     }
 
-//    /**
-//     * @return Log[] Returns an array of Log objects
-//     */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('l')
-            ->andWhere('l.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('l.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Log
+    public function findLastLog()
     {
+
         return $this->createQueryBuilder('l')
-            ->andWhere('l.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->andWhere('l.job = :val')
+            ->orderBy('l.id', 'DESC')
+            ->setMaxResults(1)
+            ->setParameter('val', "Docteur")
+            ->getQuery()->getResult();
+
     }
-    */
+
+    public function findByDatesAndJobs(\DateTime $start, \DateTime $end, string $job)
+    {
+        if ($job == '' or !isset($job))
+            throw new \InvalidArgumentException("Le metier n'est pas définie correctement", 403);
+
+        $interval = date_diff($start, $end);
+
+        if ($interval->invert == 1) {
+            $datetemp = $start;
+            $start = $end;
+            $end = $datetemp;
+            unset($datetemp);
+        }
+        //Now we have check inputs let's get datas form DB.
+
+        $liste = $this->createQueryBuilder('l')
+            ->andWhere('l.job=:val')
+            ->andWhere('l.debut >= :debut AND l.debut<=:fin')
+            ->orderBy('l.id')
+            ->setParameter('val', $job)
+            ->setParameter('debut', $start->format("Y-m-d H:i:s"))
+            ->setParameter('fin', $end->format("Y-m-d H:i:s"))
+            ->getQuery()
+            ->getResult();
+
+        return $liste;
+    }
 }

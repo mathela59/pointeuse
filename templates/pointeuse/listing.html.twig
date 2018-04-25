@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello {{ controller_name }}!{% endblock %}
+
+{% block body %}
+    <a href="{{ path('homepage') }}">Accueil</a>
+    <a href="{{ path('garde') }}">Ajouter Garde</a>
+    <a href="{{ path('docteur') }}">Ajouter Docteur</a>
+    <a href="{{ path('liste') }}">liste</a>
+
+    {{ form(form) }}
+
+    {% if liste is defined %}
+        <table>
+            <thead>
+            <tr>
+                <th>Job</th>
+                <th>Date de debut</th>
+                <th>Date de fin</th>
+                <th>Durée en minutes</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in liste %}
+                <tr>
+                    <td>{{ item.Job }}</td>
+                    <td>{{ item.Debut|date("Y-m-d H:i") }}</td>
+                    <td>{{ item.Fin|date("Y-m-d H:i") }}</td>
+                    <td>{{ item.Duration }}</td>
+                </tr>
+            {% endfor %}
+            <tr><td colspan=""3">Total</td><td>{{ heures }}H {{ minutes }}m</td></tr>
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

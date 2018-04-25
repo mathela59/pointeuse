@@ -22,7 +22,7 @@ class Log
     private $debut;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $fin;
 
@@ -36,31 +36,31 @@ class Log
         return $this->id;
     }
 
-    public function getDebut(): ?\DateTimeInterface
+    public function getDebut()
     {
         return $this->debut;
     }
 
-    public function setDebut(\DateTimeInterface $debut): self
+    public function setDebut(\DateTime $debut): self
     {
         $this->debut = $debut;
 
         return $this;
     }
 
-    public function getFin(): ?\DateTimeInterface
+    public function getFin()
     {
         return $this->fin;
     }
 
-    public function setFin(\DateTimeInterface $fin): self
+    public function setFin(\DateTime $fin): self
     {
         $this->fin = $fin;
 
         return $this;
     }
 
-    public function getJob(): ?string
+    public function getJob()
     {
         return $this->job;
     }
